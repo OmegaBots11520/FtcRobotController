@@ -22,11 +22,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import com.google.mlkit.vision.common.InputImage;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -39,12 +39,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 
-
-
-@Autonomous(name="Robot: autobot2 ", group="Robot")
+@Autonomous(name="Robot: autobot3 ", group="Robot")
 //@Disabled
 
-public class autobot2 extends LinearOpMode
+public class autobot3 extends LinearOpMode
 {
     OpenCvWebcam webcam;
     barcodescanner scanner = new barcodescanner();
@@ -64,7 +62,7 @@ public class autobot2 extends LinearOpMode
 
     double[] DriveData = new double[7];
 
-    public autobot2() {
+    public autobot3() {
 
     }
 
@@ -160,28 +158,20 @@ public class autobot2 extends LinearOpMode
 
             if(parkingposition==3){
 
-            DriveData= new double[]{0.2, 1, -1, 1, -1, 2,parkingposition};
+            DriveData= new double[]{0.25, 1, -1, -1, 1, 3,parkingposition};
             encoderDrive();
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 2.5,parkingposition};
-            encoderDrive();
-            DriveData= new double[]{0.2, -1, 1, -1, 1, 2,parkingposition};
-            encoderDrive();
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 4.0,parkingposition};
+            DriveData= new double[]{0.25, 1, 1, 1, 1, 3.0,parkingposition};
             encoderDrive();
             }
             else if (parkingposition==2) {
-                DriveData= new double[]{0.2, 1, 1, 1, 1, 3.0,parkingposition};
+                DriveData= new double[]{0.25, 1, 1, 1, 1, 3.0,parkingposition};
                 encoderDrive();
             }
             else if(parkingposition==1){
 
-            DriveData= new double[]{0.2, -1, 1, -1, 1, 2.5,parkingposition};
+            DriveData= new double[]{0.25, -1, 1, 1, -1, 3,parkingposition};
             encoderDrive();
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 2.5,parkingposition};
-            encoderDrive();
-            DriveData= new double[]{0.2, 1, -1, 1, -1, 2.5,parkingposition};
-            encoderDrive();
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 4.0,parkingposition};
+            DriveData= new double[]{0.25, 1, 1, 1, 1, 3.0,parkingposition};
             encoderDrive();
             }
 

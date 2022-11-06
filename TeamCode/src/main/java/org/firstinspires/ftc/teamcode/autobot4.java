@@ -22,11 +22,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import android.os.Environment;
+import android.widget.Toast;
+
 import com.google.mlkit.vision.common.InputImage;
+import com.opencsv.CSVReader;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -38,13 +41,13 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import java.io.File;
+import java.io.FileReader;
 
-
-
-@Autonomous(name="Robot: autobot2 ", group="Robot")
+@Autonomous(name="Robot: autobot4 ", group="Robot")
 //@Disabled
 
-public class autobot2 extends LinearOpMode
+public class autobot4 extends LinearOpMode
 {
     OpenCvWebcam webcam;
     barcodescanner scanner = new barcodescanner();
@@ -62,9 +65,10 @@ public class autobot2 extends LinearOpMode
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
+    double[][] DriveData1 = new double[9][7];
     double[] DriveData = new double[7];
 
-    public autobot2() {
+    public autobot4() {
 
     }
 
@@ -124,8 +128,42 @@ public class autobot2 extends LinearOpMode
             { }
         });
 
+        //telemetry.addLine("no of lines read");
+
+        try {
+            //File csvfile = new File("/storage/sdcard0/FIRST/data.csv");
+            File fileDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File csvfile = new File(fileDirectory,"data.csv");
+
+            //if(csvfile.exists() && !csvfile.isDirectory()) {
+            //    telemetry.addData("filedata", csvfile);
+            //}
+           // else
+            //    telemetry.addData("filedata", "file not found");
+
+            CSVReader reader = new CSVReader(new FileReader(csvfile.getAbsolutePath()));
+            String[] nextLine;
+            int i = 0 ;
+            while ((nextLine = reader.readNext()) != null) {
+                // nextLine[] is an array of values from the line
+                //telemetry.addData("filedata", nextLine);
+               // telemetry.update();
+                for(int j = 0 ; j<7;j++) DriveData1[i][j] = Double.parseDouble(nextLine[j]);
+                i++;
+            }
+
+            telemetry.addData("no", i);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //Toast.makeText(this, "The specified file was not found", Toast.LENGTH_SHORT).show();
+            telemetry.addData("error", "file  noy found");
+
+        }
+
         telemetry.addLine("Waiting for start");
         telemetry.update();
+
         waitForStart();
         int parkingposition = 0;
         while (opModeIsActive())
@@ -133,7 +171,7 @@ public class autobot2 extends LinearOpMode
             telemetry.addData("QR_Code", data);
             telemetry.update();
 
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 1.0,parkingposition};
+            //DriveData= new double[]{0.2, 1, 1, 1, 1, 1.0,parkingposition};
             //encoderDrive();
             runtime.reset();
             parkingposition = 2;
@@ -151,49 +189,40 @@ public class autobot2 extends LinearOpMode
                 sleep(100);
 
             }
-
             webcam.stopStreaming();
             telemetry.addData("Parking Position", parkingposition);
             telemetry.update();
-
-
-
             if(parkingposition==3){
-
-            DriveData= new double[]{0.2, 1, -1, 1, -1, 2,parkingposition};
+            DriveData = DriveData1[0];
             encoderDrive();
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 2.5,parkingposition};
+            DriveData = DriveData1[1];
             encoderDrive();
-            DriveData= new double[]{0.2, -1, 1, -1, 1, 2,parkingposition};
+            DriveData = DriveData1[2];
             encoderDrive();
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 4.0,parkingposition};
+            DriveData = DriveData1[3];
             encoderDrive();
             }
             else if (parkingposition==2) {
-                DriveData= new double[]{0.2, 1, 1, 1, 1, 3.0,parkingposition};
+                DriveData = DriveData1[4];
                 encoderDrive();
             }
             else if(parkingposition==1){
-
-            DriveData= new double[]{0.2, -1, 1, -1, 1, 2.5,parkingposition};
+            DriveData = DriveData1[5];
             encoderDrive();
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 2.5,parkingposition};
+            DriveData = DriveData1[6];
             encoderDrive();
-            DriveData= new double[]{0.2, 1, -1, 1, -1, 2.5,parkingposition};
+            DriveData = DriveData1[7];
             encoderDrive();
-            DriveData= new double[]{0.2, 1, 1, 1, 1, 4.0,parkingposition};
+            DriveData = DriveData1[8];
             encoderDrive();
             }
-
             telemetry.addData("QR_Code", "Done");
             telemetry.addData("QR_Code1", data);
             telemetry.addData("QR_Code2",parkingposition);
             telemetry.update();
-
             while(opModeIsActive()){
                 sleep(100);
             }
-
         }
     }
 
